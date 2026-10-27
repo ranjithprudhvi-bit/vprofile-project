@@ -1,5 +1,5 @@
 services:
-vprodb:
+ vprodb:
    build:
      context: ./Docker-files/db
      dockerfile: Dockerfile
@@ -13,7 +13,7 @@ vprodb:
    environment:
      MYSQL_ROOT_PASSWORD: vprodbpass
      MYSQL_DATABASE: accounts
-vproapp:
+ vproapp:
    build:
      context: ./Docker-files/app
      dockerfile: Dockerfile
@@ -26,13 +26,13 @@ vproapp:
      - vproappdata:/usr/local/tomcat/webapps
    depends_on:
      - vprodb       
-vprocache01:
+ vprocache01:
    image: memcached
    container_name: vprocache01
    restart: always  
    ports:
      - "11211:11211"
-vpromq01:
+ vpromq01:
    image: rabbitmq
    container_name: vpromq01
    restart: always
@@ -41,7 +41,7 @@ vpromq01:
    environment:
      RABBITMQ_DEFAULT_USER: guest
      RABBITMQ_DEFAULT_PASS: guest
-vproweb:  
+ vproweb:  
    build:
      context: ./Docker-files/web
      dockerfile: Dockerfile
@@ -50,7 +50,7 @@ vproweb:
    restart: always
    ports:
      - "80:80"        
-volumes:
+ volumes:
    vprodbdata:{}
    vproappdata:{}
    
