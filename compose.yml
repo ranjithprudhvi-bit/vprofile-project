@@ -1,0 +1,56 @@
+services:
+vprodb:
+   build:
+     context: ./Docker-files/db
+     dockerfile: Dockerfile
+   image: casi777/vprofiledb  
+   container_name: vprodb
+   restart: always
+   ports:
+     - "3306:3306"
+   volumes:
+     - vprodbdata:/var/lib/mysql
+   environment:
+     MYSQL_ROOT_PASSWORD: vprodbpass
+     MYSQL_DATABASE: accounts
+vproapp:
+   build:
+     context: ./Docker-files/app
+     dockerfile: Dockerfile
+   image: casi777/vproapp  
+   container_name: vproapp
+   restart: always
+   ports:
+     - "8080:8080"
+   volumes:
+     - vproappdata:/usr/local/tomcat/webapps
+   depends_on:
+     - vprodb       
+vprocache01:
+   image: memcached
+   container_name: vprocache01
+   restart: always  
+   ports:
+     - "11211:11211"
+vpromq01:
+   image: rabbitmq
+   container_name: vpromq01
+   restart: always
+   ports:
+     - "5672:5672"
+   environment:
+     RABBITMQ_DEFAULT_USER: guest
+     RABBITMQ_DEFAULT_PASS: guest
+vproweb:  
+   build:
+     context: ./Docker-files/web
+     dockerfile: Dockerfile
+   image: casi777/vprofileweb  
+   container_name: vproweb
+   restart: always
+   ports:
+     - "80:80"        
+volumes:
+   vprodbdata:{}
+   vproappdata:{}
+   
